@@ -76,10 +76,24 @@
 
           [Download](https://www.kali.org/downloads/)
 
-          安裝後第一件事
+          --
+
+          #雖然不知道發生了甚麼事
+
+	  也許是kali的repository有變 (我不知道...)
+	  ```sh
+	  cat > etc/apt/sources.list
+	  deb http://old.kali.org/kali sana main non-free contrib
+	  # For source package access, uncomment the following line
+	  # deb-src http://old.kali.org/kali sana main non-free contrib
+	  ```
+
+	  --
+
+	  安裝後第一件事
 
           ```sh
-          sudo apt-get update
+          apt-get update
           ```
 
           --
@@ -116,7 +130,7 @@
 
           #Install
           ```sh
-          sudo apt-get install vim
+          apt-get install vim
           ```
 
           ##[當個真男人](https://duckll.github.io/2015/vm_kali_linux/#/5) <!-- .element: target="blank"-->
@@ -131,7 +145,7 @@
 
           #Install
           ```sh
-          sudo apt-get install gcc-multilib
+          apt-get install gcc-multilib
           ```
 
           --
@@ -158,7 +172,7 @@
 
           #Install
           ```sh
-          sudo apt-get install nasm
+          apt-get install nasm
           ```
 
           --
@@ -194,7 +208,7 @@
           ##Install
 
           ```sh
-          sudo apt-get install binutils
+          apt-get install binutils
           ```
 
           --
@@ -210,7 +224,7 @@
 
           #Install
           ```sh
-          sudo apt-get install git
+          apt-get install git
           ```
 
           --
@@ -228,7 +242,7 @@
           #Install
 
           ```sh
-          sudo apt-get install gdb
+          apt-get install gdb
           ```
 
           --
@@ -249,8 +263,8 @@
 
           #Install
           ```sh
-          sudo apt-get install python-setuptools
-          sudo easy_install pip
+          apt-get install python-setuptools
+          easy_install pip
           ```
 
           ---
@@ -263,7 +277,7 @@
           #Install
 
           ```sh
-          sudo pip install ipython
+          pip install ipython
           ```
 
           "sudo" is not a good method but a quick method to install plugins  
@@ -279,9 +293,9 @@
           #Install
 
           ```sh
-          sudo apt-get install python-dev
-          sudo pip install pwntools
-          sudo pip install --upgrade capstone
+          apt-get install python-dev
+          pip install pwntools
+          pip install --upgrade capstone
           ```
 
           ---
@@ -292,9 +306,9 @@
 
           #之後如果有CTF
 
-          希望大家可以花些時間解題,
-          剛入門一定是四處碰壁,
-          看過題目，想想漏洞，有沒有特徵可以GOOGLE,
+          希望大家可以花些時間解題，
+          剛入門一定是四處碰壁，
+          看過題目，想想漏洞，有沒有特徵可以GOOGLE，
           打完之後翻一下write-up
 
           --
