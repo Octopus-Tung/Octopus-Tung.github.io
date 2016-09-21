@@ -80,17 +80,18 @@
 
           #雖然不知道發生了甚麼事
 
-	  也許是kali的repository有變 (我不知道...)
-	  ```sh
-	  cat > /etc/apt/sources.list
-	  deb http://old.kali.org/kali sana main non-free contrib
-	  # For source package access, uncomment the following line
-	  # deb-src http://old.kali.org/kali sana main non-free contrib
-	  ```
+          也許是kali的repository有變 (我不知道...)
+          
+          ```sh
+          cat > /etc/apt/sources.list
+          deb http://old.kali.org/kali sana main non-free contrib
+          # For source package access, uncomment the following line
+          # deb-src http://old.kali.org/kali sana main non-free contrib
+          ```
 
-	  --
+          --
 
-	  安裝後第一件事
+          安裝後第一件事
 
           ```sh
           apt-get update
@@ -326,7 +327,7 @@
       // Full list of configuration options available at:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-      	controls: true,
+        controls: true,
         progress: true,
         history: true,
         slideNumber: true,
@@ -343,19 +344,20 @@
         minScale: 0.1,
         maxScale: 1.0,
 
-      	transition: 'convex', // none/fade/slide/convex/concave/zoom
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
 
-      	// Optional reveal.js plugins
-      	dependencies: [
-      		{ src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      		{ src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      		{ src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
             { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-      		{ src: '../../plugin/zoom-js/zoom.js', async: true },
-      		{ src: '../../plugin/notes/notes.js', async: true }
-      	]
+          { src: '../../plugin/zoom-js/zoom.js', async: true },
+          { src: '../../plugin/notes/notes.js', async: true }
+        ]
       });
     </script>
   </body>
 </html>
+
 
