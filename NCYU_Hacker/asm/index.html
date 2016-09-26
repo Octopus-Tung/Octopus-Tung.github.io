@@ -101,7 +101,7 @@
           |   call   |  push arg; push eip; jmp addr  | call function | call sh  |   function();   |
           | int 0x80 |      system call      |   int 0x80    | int 0x80 ||
 
-          [Linux system call](http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html) <!-- .element: target="blank" -->
+          [Linux system call](http://www.informatik.htw-dresden.de/~beck/ASM/syscall_list.html) <!-- .element: target="blank" -->
 
           ---
 
@@ -109,7 +109,7 @@
 
           --
 
-          #編譯成執行檔
+          #組譯出object檔 && linker連結成執行檔 && 執行
 
           ```sh
           nasm -f elf32 -o shell.o shell.s && ld -m elf_i386 -o shell.bin shell.o && ./shell.bin
