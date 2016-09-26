@@ -31,7 +31,7 @@
           <script type="text/template">
           #ASM
 
-          
+          千萬要別睡著啊~~~
 
           張宇彤
           2016/09/29 <!-- .element: align="right" -->
@@ -60,6 +60,12 @@
 
           --
 
+           ##Memory organization per process
+
+          ![](http://www.google.com.tw/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwjqu6by_qzPAhWGnZQKHUiXARoQjRwIBw&url=http%3A%2F%2Fcis-linux1.temple.edu%2F~giorgio%2Fcis307%2Freadings%2Funix1.html&psig=AFQjCNEZixszJMS0SThdx5cmxix3zcJ0WA&ust=1474977868367917)
+
+          --
+
           ##Stack
 
           ![](./stack.png)
@@ -76,7 +82,7 @@
           |        ---         |        ---         |      ---       |    ---    |        ---         |
           |      mov, lea      |       設定值       | mov dst,source | mov eax,4 |       eax=4;       |
           |      add, sub      |       運算值       | add dst,source | add eax,4 |      eax+=4;       |
-          |      mul, div      |       運算值       |   mul source   |  mul eax  |     eax*=eax;      |
+          |      mul, div      |       運算值       |   mul source   |   mul eax  |     eax*=eax;     |
           |        push        | esp-=4; [esp]=reg; |    push reg    | push eax  |  stack.push(eax);  |
           |        pop         | reg=[esp]; esp+=4; |    pop reg     |  pop eax  |  eax=stack.pop();  |
           |        cmp         |     condition      |  cmp reg,val   | cmp eax,4 |   zf=eax==4?1:0;   |
@@ -88,8 +94,9 @@
 
           | 指令 | 作用 | 語法 | 範例 | C++ |
           |  --- |  --- |  --- |  --- | --- |
+          | inc, dec |      add eax, 1       |    inc reg    |  inc eax | eax++;  | 
           |   nop    |    xchange eax,eax    |      nop      |   nop    ||
-          |   ret    |        pop eip        |      ret      |   ret    | eip=stack.pop() |
+          |   ret    |        pop eip        |      ret      |   ret    | eip=stack.pop(); |
           |  leave   | mov esp,ebp; pop ebp; |     leave     |  leave   ||
           |   call   |  push arg; push eip; jmp addr  | call function | call sh  |   function();   |
           | int 0x80 |      system call      |   int 0x80    | int 0x80 ||
@@ -206,6 +213,37 @@
               int 0x80
           ```
 
+          --
+
+          #Call function
+
+          ```x86asm
+          BITS 32
+          section .data
+            msg db 'hello!',0ah
+
+          section .text
+            global _start
+
+            _www:
+
+              mov eax,4
+              mov ebx,1
+              mov ecx,msg
+              mov edx,7
+              int 0x80
+              
+              ret
+
+            _start:
+
+              call _www
+              
+              mov eax,1
+              int 0x80
+
+          ```
+
           ---
 
           #課堂練習
@@ -214,11 +252,15 @@
 
           2. 輸出輸入的字串
 
-          3. 九九乘法
+          3. 從1加到10(用inc)
+
+          4. 從_start call functionA，再call functionB，再call functionC，三個function會各自印出A、B、C
 
           ---
 
           #END
+
+          ~~圖片來源取自網路，而投影片87%取自於學長slides XD~~ <!-- .element: style="color:#000;" -->
 
           </script>
         </section>
