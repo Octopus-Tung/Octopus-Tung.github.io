@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <meta charset='utf-8'>
+    <title>Decompile</title>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' name='viewport'>
+    <link href='../../css/reveal.css' rel='stylesheet'>
+    <link href='../../css/theme/night.css' id='theme' rel='stylesheet'>
+    <!-- Code syntax highlighting -->
+    <link href='../../lib/css/zenburn.css' rel='stylesheet'>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../css/print/pdf.css' : '../../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+      <script src="../../lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class='reveal'>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class='slides'>
+        <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+          <script type="text/template">
+          #Human Decompiler
+
+          成就達成：人肉decompiler
+
+          張宇彤
+          2016/10/06 <!-- .element: align="right" -->
+
+          --
+
+          ##main也是一個function
+
+          ```x86asm
+          08048330 <_start>:
+           8048330:       xor    ebp,ebp
+           8048332:       pop    esi
+           8048333:       mov    ecx,esp
+           8048335:       and    esp,0xfffffff0
+           8048338:       push   eax
+           8048339:       push   esp
+           804833a:       push   edx
+           804833b:       push   0x8048500
+           8048340:       push   0x8048490
+           8048345:       push   ecx
+           8048346:       push   esi
+           8048347:       push   0x8048450
+           804834c:       call   8048320 <__libc_start_main@plt>
+           8048351:       hlt    
+           8048352:       xchg   ax,ax
+           8048354:       xchg   ax,ax
+           8048356:       xchg   ax,ax
+           8048358:       xchg   ax,ax
+           804835a:       xchg   ax,ax
+           804835c:       xchg   ax,ax
+           804835e:       xchg   ax,ax
+           ```
+
+          --
+
+          ##main
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       mov    eax,0x0
+           80483d3:       pop    ebp
+           80483d4:       ret    
+          ```
+
+          ---
+
+          #Variable
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x4
+           80483d1:       mov    DWORD PTR [ebp-0x4],0xa
+           80483d8:       mov    eax,0x0
+           80483dd:       leave  
+           80483de:       ret    
+
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x4
+           80483d1:       mov    DWORD PTR [ebp-0x4],0x0
+           80483d8:       mov    eax,ds:0x8049670
+           80483dd:       mov    DWORD PTR [ebp-0x4],eax
+           80483e0:       mov    eax,0x0
+           80483e5:       leave  
+           80483e6:       ret    
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x8],0xa
+           80483d8:       lea    eax,[ebp-0x8]
+           80483db:       mov    DWORD PTR [ebp-0x4],eax
+           80483de:       mov    eax,0x0
+           80483e3:       leave  
+           80483e4:       ret    
+          ```
+
+          ---
+
+          #Control flow
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x4
+           80483d1:       mov    DWORD PTR [ebp-0x4],0xa
+           80483d8:       cmp    DWORD PTR [ebp-0x4],0x63
+           80483dc:       jg     80483e5 <main+0x1a>
+           80483de:       mov    eax,0x0
+           80483e3:       jmp    80483ea <main+0x1f>
+           80483e5:       mov    eax,0x0
+           80483ea:       leave  
+           80483eb:       ret    
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x4],0xa
+           80483d8:       cmp    DWORD PTR [ebp-0x4],0x63
+           80483dc:       jg     80483e7 <main+0x1c>
+           80483de:       mov    DWORD PTR [ebp-0x8],0x1
+           80483e5:       jmp    80483ee <main+0x23>
+           80483e7:       mov    DWORD PTR [ebp-0x8],0x0
+           80483ee:       mov    eax,0x0
+           80483f3:       leave  
+           80483f4:       ret    
+          ```
+
+          --
+          
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x4],0x1
+           80483d8:       mov    eax,DWORD PTR [ebp-0x4]
+           80483db:       cmp    eax,0x2
+           80483de:       je     80483f0 <main+0x25>
+           80483e0:       cmp    eax,0x3
+           80483e3:       je     80483f6 <main+0x2b>
+           80483e5:       cmp    eax,0x1
+           80483e8:       jne    80483fc <main+0x31>
+           80483ea:       mov    BYTE PTR [ebp-0x5],0x41
+           80483ee:       jmp    8048401 <main+0x36>
+           80483f0:       mov    BYTE PTR [ebp-0x5],0x42
+           80483f4:       jmp    8048401 <main+0x36>
+           80483f6:       mov    BYTE PTR [ebp-0x5],0x43
+           80483fa:       jmp    8048401 <main+0x36>
+           80483fc:       mov    BYTE PTR [ebp-0x5],0x44
+           8048400:       nop
+           8048401:       mov    eax,0x0
+           8048406:       leave  
+           8048407:       ret    
+          ```
+
+          ---
+
+          #Control flow 2
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x8],0x0
+           80483d8:       mov    DWORD PTR [ebp-0x4],0x0
+           80483df:       jmp    80483eb <main+0x20>
+           80483e1:       mov    eax,DWORD PTR [ebp-0x4]
+           80483e4:       add    DWORD PTR [ebp-0x8],eax
+           80483e7:       add    DWORD PTR [ebp-0x4],0x1
+           80483eb:       cmp    DWORD PTR [ebp-0x4],0x9
+           80483ef:       jle    80483e1 <main+0x16>
+           80483f1:       mov    eax,0x0
+           80483f6:       leave  
+           80483f7:       ret    
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x4],0x0
+           80483d8:       mov    DWORD PTR [ebp-0x8],0x0
+           80483df:       jmp    80483eb <main+0x20>
+           80483e1:       mov    eax,DWORD PTR [ebp-0x4]
+           80483e4:       add    DWORD PTR [ebp-0x8],eax
+           80483e7:       add    DWORD PTR [ebp-0x4],0x1
+           80483eb:       cmp    DWORD PTR [ebp-0x4],0x63
+           80483ef:       jle    80483e1 <main+0x16>
+           80483f1:       mov    eax,0x0
+           80483f6:       leave  
+           80483f7:       ret    
+          ```
+
+          ---
+
+          #Bitwise Operation
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x4],0x4
+           80483d8:       mov    DWORD PTR [ebp-0x8],0x0
+           80483df:       mov    eax,DWORD PTR [ebp-0x4]
+           80483e2:       and    eax,0x1
+           80483e5:       mov    DWORD PTR [ebp-0x8],eax
+           80483e8:       mov    eax,0x0
+           80483ed:       leave  
+           80483ee:       ret    
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <main>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       sub    esp,0x8
+           80483d1:       mov    DWORD PTR [ebp-0x4],0x4
+           80483d8:       mov    DWORD PTR [ebp-0x8],0x0
+           80483df:       mov    eax,DWORD PTR [ebp-0x4]
+           80483e2:       xor    al,0xff
+           80483e4:       mov    DWORD PTR [ebp-0x8],eax
+           80483e7:       mov    eax,0x0
+           80483ec:       leave  
+           80483ed:       ret    
+          ```
+
+          ---
+
+          #function
+
+          ```x86asm
+          080483fb <main>:
+           80483fb:       push   ebp
+           80483fc:       mov    ebp,esp
+           80483fe:       sub    esp,0x4
+           8048401:       mov    DWORD PTR [ebp-0x4],0x7e0
+           8048408:       push   DWORD PTR [ebp-0x4]
+           804840b:       push   0x80484b0
+           8048410:       call   80482d0 <printf@plt>
+           8048415:       add    esp,0x8
+           8048418:       mov    eax,0x0
+           804841d:       leave  
+           804841e:       ret    
+          ```
+
+          --
+
+          ##課堂練習
+
+          ```x86asm
+          080483cb <myfunc>:
+           80483cb:       push   ebp
+           80483cc:       mov    ebp,esp
+           80483ce:       mov    edx,DWORD PTR [ebp+0x8]
+           80483d1:       mov    eax,DWORD PTR [ebp+0xc]
+           80483d4:       add    eax,edx
+           80483d6:       pop    ebp
+           80483d7:       ret    
+
+          080483d8 <main>:
+           80483d8:       push   ebp
+           80483d9:       mov    ebp,esp
+           80483db:       sub    esp,0x4
+           80483de:       push   0x5
+           80483e0:       push   0x5
+           80483e2:       call   80483cb <myfunc>
+           80483e7:       add    esp,0x8
+           80483ea:       mov    DWORD PTR [ebp-0x4],eax
+           80483ed:       mov    eax,0x0
+           80483f2:       leave  
+           80483f3:       ret    
+          ```
+
+          ---
+
+          #String
+
+          ```x86asm
+          080483fb <main>:
+           80483fb:       push   ebp
+           80483fc:       mov    ebp,esp
+           80483fe:       sub    esp,0x8
+           8048401:       mov    DWORD PTR [ebp-0x6],0x63696c41
+           8048408:       mov    WORD PTR [ebp-0x2],0x65
+           804840e:       lea    eax,[ebp-0x6]
+           8048411:       push   eax
+           8048412:       push   0x80484c0
+           8048417:       call   80482d0 <printf@plt>
+           804841c:       add    esp,0x8
+           804841f:       mov    eax,0x0
+           8048424:       leave  
+           8048425:       ret
+          ```
+
+          ---
+
+          #END
+
+          ~~code來自AIS3暑期課程~~ <!-- .element: style="color:#000;" -->
+
+          </script>
+        </section>
+      </div>
+    </div>
+    <script src='../../lib/js/head.min.js'></script>
+    <script src='../../js/reveal.js'></script>
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        slideNumber: true,
+        center: true,
+        keyboard: true,
+        overview: true,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1024,
+        height: 768,
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.1,
+        maxScale: 1.0,
+
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../../plugin/zoom-js/zoom.js', async: true },
+          { src: '../../plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+  </body>
+</html>
+
+
+
