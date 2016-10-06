@@ -78,6 +78,13 @@
            80483d4:       ret    
           ```
 
+          --
+
+          ```sh
+          gcc -O0 -m32 -mpreferred-stack-boundary=2 ex.c -o ex
+          objdump -d -M intel --no-show-raw-insn ex | less
+          ```
+
           ---
 
           #Variable
