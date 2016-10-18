@@ -84,7 +84,7 @@
           ##Example_0
 
 
-          ```x86_asm
+          ```x86asm
           BITS 32
 
           global _start
@@ -148,13 +148,13 @@
 
           strycpy遇到null會以為字串結束
 
-          ```x86_asm
+          ```x86asm
           
-          設定值
+          ;設定值
           mov eax,1; #-> mov eax,0x00000001 有null
           mov al,1;  #-> mov al,0x01 沒null
           
-          清空暫存器
+          ;清空暫存器
           mov ebx,0; #有null
           xor ebx,ebx; #沒null
           ```
