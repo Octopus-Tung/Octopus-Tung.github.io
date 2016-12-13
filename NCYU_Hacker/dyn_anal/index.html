@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <meta charset='utf-8'>
+    <title>Dynamic Analysis</title>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' name='viewport'>
+    <link href='../../css/reveal.css' rel='stylesheet'>
+    <link href='../../css/theme/night.css' id='theme' rel='stylesheet'>
+    <!-- Code syntax highlighting -->
+    <link href='../../lib/css/zenburn.css' rel='stylesheet'>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../css/print/pdf.css' : '../../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+      <script src="../../lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class='reveal'>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class='slides'>
+        <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+          <script type="text/template">
+          #Dynamic Analysis
+
+          張宇彤
+          2016/12/13 <!-- .element: align="right" -->
+
+          ---
+
+          #GDB
+
+          --
+
+          #基本操作
+
+          | command |  function   |
+          |   ---   |     ---     |
+          |    r    |     run     |
+          |    b    | break point |
+          |    c    |  continue   |
+          |   si    |  step into  |
+          |   ni    | step cross  |
+          |   fin   |  step out   |
+          |    q    |    quit     |
+
+          --
+
+          #進階操作
+
+          |     command     |        function        |
+          | --- | --- |
+          |     x/4wx $esp      | print 4 word from $esp |
+          |    info function    |     show function      |
+          |     p function      |   function location    |
+          |   disass function   |  disassemble function  |
+          |        find         |      find string       |
+          | bt | backtrace |
+          |       record        |         record         |
+          |         rsi         |       step back        |
+          | set {type}adr=value | change value in memory |
+
+          --
+
+          #[Cheat Sheet](http://darkdust.net/files/GDB%20Cheat%20Sheet.pdf) <!-- .element: target="blank" -->
+
+          ---
+
+          #Immunity Debugger
+
+          --
+
+          像這種有GUI的工具，我們就直接DEMO吧！
+
+          ---
+
+          #Qira
+
+          --
+
+          #如果用Firefox開...
+          ![](./WTF.png)
+
+          --
+
+          #安裝Chromium
+
+          [先去下載chrome的deb](https://www.google.com/chrome/)
+          
+          ```sh
+          dpkg -i xxx.deb
+          apt-get install libapp
+          apt-get install libappindicator1
+          apt-get -f install
+          ```
+
+          --
+
+          #chrome開不起來
+          因為chrome不能夠以root權限去run，有兩種方法可以解決
+          
+          [adduser](http://xiaomange.meximas.com/?p=257)
+          
+          ```sh
+          /usr/bin/google-chrome-stable %U --no-sandbox --user-data-dir=/root/chrome
+          ```
+
+          --
+
+          #安裝Qira
+
+          ```sh
+           cd ~/ && wget -qO- https://github.com/BinaryAnalysisPlatform/qira/archive/v1.2.tar.gz | tar zx && cd qira-1.2 && ./install.sh 
+          ```
+
+          [qira](http://qira.me/)
+
+          --
+
+          既然是GUI，那就XD
+
+          ---
+
+          #END
+
+          </script>
+        </section>
+      </div>
+    </div>
+    <script src='../../lib/js/head.min.js'></script>
+    <script src='../../js/reveal.js'></script>
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+        progress: true,
+        history: true,
+        slideNumber: true,
+        center: true,
+        keyboard: true,
+        overview: true,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1024,
+        height: 768,
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.1,
+        maxScale: 1.0,
+
+      	transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+      	// Optional reveal.js plugins
+      	dependencies: [
+      		{ src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		{ src: '../../plugin/zoom-js/zoom.js', async: true },
+      		{ src: '../../plugin/notes/notes.js', async: true }
+      	]
+      });
+    </script>
+  </body>
+</html>
+
