@@ -180,6 +180,8 @@
           }
           ```
 
+          ##編譯：gcc -m32 -no-pie -fno-stack-protector -mpreferred-stack-boundary=2 -o sample sample.c
+
           ---
 
           #shellcode injection
@@ -212,6 +214,8 @@
               return 0;
           }
           ```
+
+          ##編譯：gcc -m32 -z execstack -fno-stack-protector -mpreferred-stack-boundary=2 -o sample sample.c
 
           ---
 
@@ -258,6 +262,8 @@
           }
           ```
 
+          ##編譯：gcc -m32 -no-pie -fno-stack-protector -mpreferred-stack-boundary=2 -o sample sample.c
+
           ---
 
           #DEP bypass with ROP(gadget)
@@ -281,6 +287,8 @@
           ```sh
           gcc -static
           ```
+
+          ##編譯：gcc -m32 -no-pie -fno-stack-protector -mpreferred-stack-boundary=2 -static -o sample sample.c
 
           --
 
