@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <meta charset='utf-8'>
+    <title>DEP</title>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' name='viewport'>
+    <link href='../../css/reveal.css' rel='stylesheet'>
+    <link href='../../css/theme/night.css' id='theme' rel='stylesheet'>
+    <!-- Code syntax highlighting -->
+    <link href='../../lib/css/zenburn.css' rel='stylesheet'>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../css/print/pdf.css' : '../../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+      <script src="../../lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class='reveal'>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class='slides'>
+        <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+          <script type="text/template">
+          #Review & DEP/NX
+
+          張宇彤  
+          2017/03/23 <!-- .element: align="right" -->
+
+          ---
+
+          #x86 stack複習
+
+          | stack | address | frame | 
+          | --- | --- | --- | --- |
+          | local variable | ebp - 8 |
+          | | ebp - 4 |
+          | last $ebp | ebp | current frame
+          | return address | ebp + 4 |  
+          | parameter | ebp +8 | last frame
+          | | | |
+
+          --
+
+          #BOF複習
+
+          | 正常的stack | example | BOF的stack | example |
+          | --- | --- | --- | --- |
+          | local variable | 0x5559434e | local variable | 0x41414141
+          | | 0x0 | overflow | 0x41414141
+          | last $ebp | 0xffff???? | overflow | 0x41414141 
+          | return address | 0x0804???? | overflow | 0x41414141
+          | | | |
+
+          --
+
+          #shellcode複習
+
+          ```x86asm
+          BITS 32
+
+          global _start
+
+          _start:
+            push 0x0068732f
+            push 0x6e69622f
+            mov ebx, esp
+
+            mov eax, 0xb
+            mov ecx, 0x0
+            mov edx, 0x0
+            int 0x80
+          ```
+
+          [Shellcode DB](http://shell-storm.org/shellcode/) <!-- .element: target="blank" -->
+
+          各種系統各種功能的Shellcode
+
+          ---
+
+          #可能發生overflow的原因
+
+          1. gets
+          1. strcpy
+          1. etc...
+
+          --
+
+          #防禦的要點
+
+          1. 邊界檢查（限制輸入的長度）
+          1. DEP/NX
+          1. ASLR
+          1. SSP/GS
+          1. PIE
+          1. etc...
+
+          ---
+
+          #DEP
+          
+          write ^ execute = 1
+
+          --
+
+          #影響
+
+          ##shellcode無法在Stack上執行
+
+          --
+
+          ##關閉參數
+
+          ```sh
+          gcc -z execstack
+          ```
+
+          --
+
+          #對應
+
+          ##使用ROP(Return Oriented Programming)
+
+          --
+
+          #指令
+
+          編譯：gcc -m32 -mpreferred-stack-boundary=2 -o sample sample.c
+
+          關閉DEP：-z execstack
+
+          關閉SSP：-fno-stack-protector
+
+          關閉PIE：-no-pie
+
+          關閉ASLR：echo 0 > /proc/sys/kernel/randomize_va_space
+
+          ---
+
+          #return to function
+
+          --
+
+          #須關閉
+
+          ASLR
+
+          SSP
+
+          PIE
+
+          --
+
+          #Code
+
+          ```c
+          #include <stdio.h>
+          void bof()
+          {
+              char buf[87];
+              gets(buf);
+              return;
+          }
+          void getshell()
+          {
+              system("/bin/sh");
+              return;
+          }
+          int main(int argc, const char *argv[])
+          {
+              bof();
+              return 0;
+          }
+          ```
+
+          ---
+
+          #shellcode injection
+
+          --
+
+          #須關閉
+
+          DEP
+          
+          ASLR
+
+          SSP
+
+          --
+
+          #Code
+
+          ```c
+          #include <stdio.h>
+          void bof()
+          {
+              char buf[87];
+              gets(buf);
+              return;
+          }
+          int main(int argc, const char *argv[])
+          {
+              bof();
+              return 0;
+          }
+          ```
+
+          ---
+
+          #DEP bypass with ROP(function)
+
+          --
+
+          #須關閉
+
+          SSP
+
+          PIE
+
+          --
+
+          #達成的條件
+
+          ##程式有可利用的function跟字串
+
+          ```
+          payload=padding+system()+exit()+'/bin/sh\x00'
+          ```
+
+          --
+
+          #Code
+
+          ```c
+          #include <stdio.h>
+          void bof()
+          {
+              char buf[87];
+              gets(buf);
+              puts(buf);
+              return;
+          }
+          int main(int argc, const char *argv[])
+          {
+              system("ls");
+              puts("/bin/sh");
+              bof();
+              exit();
+              return 0;
+          }
+          ```
+
+          ---
+
+          #DEP bypass with ROP(gadget)
+
+          --
+
+          #須關閉
+
+          PIE
+
+          ASLR
+
+          SSP
+
+          --
+
+          #達成的條件
+
+          #程式夠大(靜態載入)有足夠的gadget
+          
+          ```sh
+          gcc -static
+          ```
+
+          --
+
+          ###所謂的gadget就是斷章取義
+          ###利用程式中的pop $e?x;ret;
+          ###來設定register的值
+
+          ---
+
+          #END
+
+          </script>
+        </section>
+      </div>
+    </div>
+    <script src='../../lib/js/head.min.js'></script>
+    <script src='../../js/reveal.js'></script>
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+        progress: true,
+        history: true,
+        slideNumber: true,
+        center: true,
+        keyboard: true,
+        overview: true,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1024,
+        height: 768,
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.1,
+        maxScale: 1.0,
+
+      	transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+      	// Optional reveal.js plugins
+      	dependencies: [
+      		{ src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		{ src: '../../plugin/zoom-js/zoom.js', async: true },
+      		{ src: '../../plugin/notes/notes.js', async: true }
+      	]
+      });
+    </script>
+  </body>
+</html>
+
